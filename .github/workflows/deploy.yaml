@@ -1,0 +1,21 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Validate policy
+        uses: gbaeke/kyverno-cli@v1
+        with:
+          command: |
+            kyverno apply ./policies --resource=./k8s/2048.yaml
+
+      - name: Deploy
+        run: 'echo "deployment in your cluster"'
